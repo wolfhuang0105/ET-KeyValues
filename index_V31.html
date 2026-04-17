@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETalking Kids 簡報資料</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:sans-serif;background:#e8f4fd;min-height:100vh}
+
+/* ── 頂部導覽 ── */
+.nav{background:#1a7fc1;padding:0;display:flex;align-items:stretch;gap:0;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.nav-logo{display:flex;align-items:center;gap:10px;padding:10px 20px;border-right:1px solid rgba(255,255,255,.2)}
+.nav-circle{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.nav-circle span:first-child{font-size:6px;font-weight:700;color:#fff;letter-spacing:.6px}
+.nav-circle span:last-child{font-size:5.5px;color:#aee4ff}
+.nav-title{font-size:13px;font-weight:500;color:#fff;letter-spacing:1px;white-space:nowrap}
+.tabs{display:flex;flex:1}
+.tab{padding:0 24px;height:58px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;border:none;background:none}
+.tab:hover{color:#fff;background:rgba(255,255,255,.08)}
+.tab.active{color:#fff;border-bottom:3px solid #ffd700;background:rgba(255,255,255,.12)}
+.tab-num{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.tab.active .tab-num{background:#ffd700;color:#1a4f78}
+
+/* ── 全域按鈕列 ── */
+.btn-bar{display:flex;gap:8px;padding:14px 20px;background:#d4eaf8;border-bottom:1px solid #b0d0eb;align-items:center;flex-wrap:wrap}
+.btn{border:none;border-radius:6px;padding:7px 14px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;transition:background .15s}
+.btn-dl{background:#1a7fc1;color:#fff}.btn-dl:hover{background:#155f96}
+.btn-cp{background:#fff;color:#1a7fc1;border:1.5px solid #1a7fc1}.btn-cp:hover{background:#e8f4fd}
+.btn svg{width:13px;height:13px;fill:currentColor}
+.toast{font-size:11px;padding:4px 10px;border-radius:4px;display:none;align-items:center;gap:4px}
+.toast-ok{background:#e8f5e0;color:#2e6a10;border:1px solid #9dd67a}
+.toast-err{background:#fdecea;color:#a32d2d;border:1px solid #f09595}
+.font-ctrl{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #b0d0eb;border-radius:8px;padding:4px 10px;margin-left:4px}
+.font-ctrl-label{font-size:11px;color:#5a7a90;font-weight:500;white-space:nowrap}
+.font-btn{background:none;border:1px solid #b0d0eb;border-radius:5px;padding:2px 7px;font-size:11px;font-weight:500;color:#1a7fc1;cursor:pointer;white-space:nowrap;line-height:1.6}
+.font-btn:hover{background:#e8f4fd}
+.font-reset{color:#888;border-color:#ccc}
+.font-reset:hover{background:#f0f0f0;color:#444}
+.font-slider-wrap{display:flex;align-items:center}
+.font-slider-wrap input[type=range]{width:80px;height:4px;accent-color:#1a7fc1;cursor:pointer}
+.font-pct{font-size:11px;color:#1a4f78;font-weight:500;min-width:34px;text-align:center}
+.page-label{font-size:11px;color:#5a7a90;margin-left:auto}
+
+/* ── 頁面容器 ── */
+.page{display:none;padding:20px}
+.page.active{display:block}
+.frame{background:#f0f8ff;border-radius:12px;padding:1rem}
+
+/* ── 共用表格樣式 ── */
+#snap1,#snap2{background:#f0f8ff;border-radius:10px;padding:.8rem}
+.sec-logo-bar{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sec-logo-circle{width:46px;height:46px;border-radius:50%;background:#1a7fc1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.sec-logo-circle span:first-child{font-size:7px;font-weight:700;color:#fff;letter-spacing:.8px}
+.sec-logo-circle span:last-child{font-size:6px;color:#aee4ff}
+.sec-title{font-size:19px;font-weight:500;color:#1a4f78;letter-spacing:2px}
+
+/* ──────────────────────────────
+   PAGE 1 : CEFR 對照表
+────────────────────────────── */
+#snap-cefr{background:#fff;border:2px solid #1a7fc1;border-radius:8px;overflow:hidden}
+.cefr-table{width:100%;border-collapse:collapse;font-size:11px}
+.cefr-table th{color:#fff;font-weight:500;font-size:10.5px;padding:8px 6px;text-align:center;border:1px solid rgba(255,255,255,.25);line-height:1.4}
+.th-base{background:#1a7fc1}
+.th-kids{background:#1876b5;border-bottom:3px solid #4fc3f7;font-size:10px}
+.th-junior{background:#1e7a52;border-bottom:3px solid #81c784;font-size:10px}
+.th-kids-grp{background:#0e5f9a;font-size:11px;letter-spacing:1px}
+.th-junior-grp{background:#1a6644;font-size:11px;letter-spacing:1px}
+.cefr-table td{padding:7px 8px;border:1px solid #b8d9f0;text-align:center;vertical-align:middle;line-height:1.5;color:#1a3a50}
+.cefr-table tbody tr{height:72px}
+.cefr-table tr:nth-child(even) td{background:#eef7ff}
+.cefr-table tr:nth-child(odd) td{background:#fff}
+.lv{font-weight:500;font-size:11.5px}
+.badge{display:inline-block;padding:2px 6px;border-radius:4px;font-size:9.5px;font-weight:500}
+.bprea{background:#dff0e8;color:#0a6644;border:1px solid #9dcfb8}
+.ba1{background:#deedf8;color:#0c4478;border:1px solid #8ec4e8}
+.ba2{background:#e8f5e0;color:#2e6a10;border:1px solid #9dd67a}
+.bb1{background:#fef0d0;color:#7a4800;border:1px solid #f0c060}
+.cefr-col{text-align:left;padding-left:10px}
+.cefr-name{font-weight:500;color:#1a3a50;font-size:11.5px}
+.cefr-desc{font-size:9.5px;color:#5a7a90;margin-top:2px}
+.zone-cell{font-weight:500;font-size:10.5px;line-height:1.6;writing-mode:vertical-lr;letter-spacing:2px}
+.za{color:#1a7fc1;background:#deedf8}
+.zb{color:#7a4800;background:#fef0d0}
+.gept{font-weight:500}.gi{color:#2e8b2e}.gm{color:#c07000}.gt{color:#888;font-size:10px}
+.na{color:#bbb}
+.sm{font-size:10px;color:#555}
+.g{font-size:11px;color:#3a3a5a;line-height:1.5}
+.gsub{font-size:9.5px;color:#7a8aaa;margin-top:1px}
+.td-elective{background:#fffbea !important}
+.elective-name{font-size:11px;color:#5a4000;font-weight:500}
+.elective-tag{display:inline-block;margin-top:4px;padding:2px 7px;background:#f5c842;color:#5a3a00;font-size:9px;font-weight:500;border-radius:10px;border:1px solid #e0a800;letter-spacing:.5px}
+.legend-row{display:flex;align-items:center;gap:6px;margin-top:8px}
+.cefr-footer{font-size:10.5px;color:#5a7a90;margin-top:7px;text-align:right}
+
+/* ──────────────────────────────
+   PAGE 2 : 競品比較
+────────────────────────────── */
+.comp{width:100%;border-radius:10px;overflow:hidden;border:2px solid #1a7fc1;margin-bottom:12px}
+.comp-head-row{display:grid;grid-template-columns:90px 1fr 1fr 1fr}
+.comp-head-label{background:#0d4f85;display:flex;align-items:center;justify-content:center;padding:10px 6px}
+.comp-head-label span{font-size:10px;font-weight:500;color:rgba(255,255,255,.7);writing-mode:vertical-lr;letter-spacing:2px}
+.head-et{background:#1a7fc1;padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:3px;border-left:1px solid rgba(255,255,255,.2)}
+.head-51{background:#e05a00;padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:3px;border-left:1px solid rgba(255,255,255,.2)}
+.head-oi{background:#6a3db8;padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:3px;border-left:1px solid rgba(255,255,255,.2)}
+.badge-win{background:#ffd700;color:#5a3a00;font-size:8.5px;font-weight:500;padding:2px 8px;border-radius:10px}
+.comp-brand{font-size:14px;font-weight:500;color:#fff}
+.comp-sub{font-size:9px;color:rgba(255,255,255,.85);text-align:center;line-height:1.5}
+.comp-founders{font-size:8.5px;color:#ffd98a;text-align:center;line-height:1.4}
+.data-row{display:grid;grid-template-columns:90px 1fr 1fr 1fr;border-top:1px solid #b8d9f0}
+.data-row:nth-child(odd){background:#fff}
+.data-row:nth-child(even){background:#eef7ff}
+.row-label-cell{background:#f0f7ff;padding:10px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-right:1px solid #b8d9f0}
+.row-icon{font-size:16px}
+.row-label{font-size:9px;color:#5a7a90;font-weight:500;text-align:center;letter-spacing:.3px}
+.cell{padding:9px 10px;border-left:1px solid #b8d9f0}
+.cell-val{font-size:11px;font-weight:500;color:#1a3a50;line-height:1.5;margin-bottom:2px}
+.cell-note{font-size:9.5px;color:#5a7a90;line-height:1.45}
+.warn{color:#a32d2d}
+.compare-bar{background:#fff;border:2px solid #1a7fc1;border-radius:8px;overflow:hidden;margin-bottom:12px}
+.compare-head{background:#1a7fc1;color:#fff;display:grid;grid-template-columns:130px 1fr 1fr 1fr;font-size:10.5px;font-weight:500}
+.compare-head div{padding:8px 10px;border-right:1px solid rgba(255,255,255,.2);text-align:center;line-height:1.4}
+.compare-head div:last-child{border-right:none}
+.compare-row{display:grid;grid-template-columns:130px 1fr 1fr 1fr;font-size:10.5px}
+.compare-row:nth-child(even){background:#eef7ff}
+.compare-row:nth-child(odd){background:#fff}
+.compare-row div{padding:7px 10px;border-right:0.5px solid #b8d9f0;color:#1a3a50;line-height:1.5;text-align:center}
+.compare-row div:first-child{color:#5a7a90;font-weight:500;background:#f5faff;font-size:10px;text-align:left}
+.compare-row div:last-child{border-right:none}
+.tag{display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:500}
+.tag-g{background:#e8f5e0;color:#2e6a10;border:1px solid #9dd67a}
+.tag-r{background:#fdecea;color:#a32d2d;border:1px solid #f09595}
+.tag-y{background:#fffbea;color:#7a4800;border:1px solid #f5c842}
+.action-bar{background:#1a4f78;border-radius:8px;padding:14px 18px;display:flex;align-items:flex-start;gap:12px}
+.action-icon{font-size:22px;flex-shrink:0;margin-top:1px}
+.action-main{font-size:13px;font-weight:500;color:#fff;line-height:1.8}
+.action-main em{color:#ffd700;font-style:normal;font-weight:500}
+.action-sub{font-size:10.5px;color:#a8cce8;margin-top:5px;line-height:1.7}
+.action-sub em{color:#7dd8ff;font-style:normal;font-weight:500}
+.comp-footer{font-size:10px;color:#5a7a90;margin-top:8px;text-align:right}
+</style>
+</head>
+<body>
+
+<!-- ── 頂部導覽 ── -->
+<div class="nav">
+  <div class="nav-logo">
+    <div class="nav-circle"><span>ETALKING</span><span>KIDS</span></div>
+    <span class="nav-title">ETalking Kids 簡報資料</span>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchPage(1)">
+      <span class="tab-num">1</span>教材程度對照表
+    </button>
+    <button class="tab" onclick="switchPage(2)">
+      <span class="tab-num">2</span>競品比較分析
+    </button>
+  </div>
+</div>
+
+<!-- ── 按鈕列 ── -->
+<div class="btn-bar">
+  <button class="btn btn-dl" id="btnDl">
+    <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zm7-18v10.17l-3.59-3.58L7 10l5 5 5-5-1.41-1.41L13 12.17V2h-1z"/></svg>下載圖片
+  </button>
+  <button class="btn btn-cp" id="btnCp">
+    <svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>複製圖片
+  </button>
+  <span class="toast toast-ok" id="toastOk">✓ 已複製到剪貼簿</span>
+  <span class="toast toast-err" id="toastErr">✗ 瀏覽器不支援複製</span>
+  <div class="font-ctrl">
+    <span class="font-ctrl-label">字級</span>
+    <button class="font-btn" id="fntDn" title="縮小">A−</button>
+    <div class="font-slider-wrap">
+      <input type="range" id="fntSlider" min="70" max="150" value="100" step="5">
+    </div>
+    <button class="font-btn" id="fntUp" title="放大">A+</button>
+    <span class="font-pct" id="fntPct">100%</span>
+    <button class="font-btn font-reset" id="fntReset" title="重置">↺</button>
+  </div>
+  <span class="page-label" id="pageLabel">第 1 頁 / 共 2 頁</span>
+</div>
+
+<!-- ══════════════════════════════
+     PAGE 1 : 教材程度對照表
+══════════════════════════════ -->
+<div class="page active" id="page1">
+<div class="frame">
+<div id="snap1">
+  <div class="sec-logo-bar">
+    <div class="sec-logo-circle"><span>ETALKING</span><span>KIDS</span></div>
+    <span class="sec-title">教材程度對照表</span>
+  </div>
+  <div id="snap-cefr">
+  <table class="cefr-table">
+  <thead>
+  <tr>
+    <th class="th-base" rowspan="2" style="width:11%">美國學籍<br>（年齡）</th>
+    <th class="th-kids-grp" style="width:7%">🧒 ETalking Kids</th>
+    <th class="th-junior-grp" style="width:7%">🧑 ETalking Junior</th>
+    <th class="th-base" rowspan="2" style="width:7%">CEFR<br>指標</th>
+    <th class="th-base" rowspan="2" style="width:22%">CEFR 等級與能力描述</th>
+    <th class="th-base" rowspan="2" style="width:5%">三大<br>區塊</th>
+    <th class="th-base" rowspan="2" style="width:9%">全民英檢<br>(GEPT)</th>
+    <th class="th-base" rowspan="2" style="width:13%">劍橋英語認證</th>
+    <th class="th-base" rowspan="2" style="width:12%">台灣學籍<br>（年齡）</th>
+  </tr>
+  <tr>
+    <th class="th-kids">Level</th>
+    <th class="th-junior">Level</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><div class="g">Pre-K ／ K</div><div class="gsub">約 4–6 歲</div></td>
+    <td class="lv">Starter</td><td class="na">—</td>
+    <td><span class="badge bprea">Pre A1</span></td>
+    <td class="cefr-col"><span class="cefr-desc" style="font-size:10.5px">語言學習啟蒙前期，能理解並使用極簡單的詞彙</span></td>
+    <td rowspan="5" class="zone-cell za">A &nbsp;Basic 基礎水平</td>
+    <td class="na">—</td><td class="na">—</td>
+    <td><div class="g">幼兒園</div><div class="gsub">約 4–6 歲</div></td>
+  </tr>
+  <tr>
+    <td><div class="g">Grade 1</div><div class="gsub">約 6–7 歲</div></td>
+    <td class="lv">Level 1</td><td class="lv">Starter</td>
+    <td><span class="badge ba1">Pre A1–A1</span></td>
+    <td rowspan="2" class="cefr-col"><span class="cefr-name">A1 Beginner</span><br><span class="cefr-desc">能理解並使用日常熟悉的詞句，進行基本溝通</span></td>
+    <td class="na">—</td>
+    <td class="td-elective"><div class="elective-name">YLE Starters</div><div class="elective-tag">✦ 選修課程涵蓋</div></td>
+    <td><div class="g">國小中低年級</div><div class="gsub">1～4 年級・約 6–10 歲</div></td>
+  </tr>
+  <tr>
+    <td><div class="g">Grade 2</div><div class="gsub">約 7–8 歲</div></td>
+    <td class="lv">Level 2</td><td class="lv">Level 1</td>
+    <td><span class="badge ba1">A1</span></td>
+    <td class="na">—</td>
+    <td class="td-elective"><div class="elective-name">YLE Movers</div><div class="elective-tag">✦ 選修課程涵蓋</div></td>
+    <td><div class="g">國小中高年級</div><div class="gsub">4～6 年級・約 9–12 歲</div></td>
+  </tr>
+  <tr>
+    <td><div class="g">Grade 3</div><div class="gsub">約 8–9 歲</div></td>
+    <td class="lv">Level 3</td><td class="lv">Level 2</td>
+    <td><span class="badge bprea">Pre A2</span></td>
+    <td rowspan="2" class="cefr-col"><span class="cefr-name">A2 Elementary</span><br><span class="cefr-desc">能理解簡單句子，在熟悉的日常情境中溝通</span></td>
+    <td class="na">—</td>
+    <td class="na">—</td>
+    <td><div class="g">國中一年級</div><div class="gsub">約 12–13 歲</div></td>
+  </tr>
+  <tr>
+    <td><div class="g">Grade 4</div><div class="gsub">約 9–10 歲</div></td>
+    <td class="lv">Level 4</td><td class="lv">Level 3</td>
+    <td><span class="badge ba2">A2</span></td>
+    <td class="gept gi">初級</td>
+    <td style="padding:0;border:1px solid #b8d9f0;vertical-align:middle">
+      <div class="td-elective" style="padding:7px 8px;border-bottom:1px solid #d0c090">
+        <div class="elective-name">YLE Flyers</div>
+        <div class="elective-tag">✦ 選修課程涵蓋</div>
+      </div>
+      <div style="padding:7px 8px;font-size:11px;font-weight:500;color:#1a3a50;text-align:center">KET（A2 Key）</div>
+    </td>
+    <td><div class="g">國中二年級</div><div class="gsub">約 13–14 歲</div></td>
+  </tr>
+  <tr>
+    <td><div class="g">Grade 5</div><div class="gsub">約 10–11 歲</div></td>
+    <td class="lv">Level 5</td><td class="lv">Level 4</td>
+    <td><span class="badge bb1">A2–B1</span></td>
+    <td rowspan="2" class="cefr-col"><span class="cefr-name">B1 Intermediate</span><br><span class="cefr-desc">能理解工作、學校等日常主題，有組織地表達意見</span></td>
+    <td rowspan="2" class="zone-cell zb">B &nbsp;Independent 獨立運用</td>
+    <td class="gept gt">初級 ～ 中級<br>過渡程度</td>
+    <td class="sm">KET ～ PET<br>過渡程度</td>
+    <td><div class="g">國中三年級</div><div class="gsub">約 14–15 歲</div></td>
+  </tr>
+  <tr>
+    <td><div class="g">Grade 6</div><div class="gsub">約 11–12 歲</div></td>
+    <td class="lv">Level 6</td><td class="lv">Level 5</td>
+    <td><span class="badge bb1">B1</span></td>
+    <td class="gept gm">中級</td>
+    <td>PET（B1 Preliminary）</td>
+    <td><div class="g">國／高中過渡</div><div class="gsub">約 15–16 歲</div></td>
+  </tr>
+  </tbody>
+  </table>
+  </div>
+  <div class="legend-row">
+    <span style="display:inline-block;padding:2px 8px;background:#f5c842;color:#5a3a00;font-size:9.5px;font-weight:500;border-radius:10px;border:1px solid #e0a800">✦ 選修課程涵蓋</span>
+    <span style="font-size:10px;color:#7a6a40">= ETalking 選修課程有提供該檢定教材輔助</span>
+  </div>
+  <p class="cefr-footer">Learning is fun！成就孩子的無限可能！</p>
+</div>
+</div>
+</div>
+
+<!-- ══════════════════════════════
+     PAGE 2 : 競品比較分析
+══════════════════════════════ -->
+<div class="page" id="page2">
+<div class="frame">
+<div id="snap2">
+  <div class="sec-logo-bar">
+    <div class="sec-logo-circle"><span>ETALKING</span><span>KIDS</span></div>
+    <span class="sec-title">競品比較分析</span>
+  </div>
+
+  <div class="comp">
+    <div class="comp-head-row">
+      <div class="comp-head-label"><span>品牌資訊</span></div>
+      <div class="head-et">
+        <div class="badge-win">⭐ 推薦首選</div>
+        <div class="comp-brand">ETalking Kids</div>
+        <div class="comp-sub">純外師母語環境</div>
+        <div class="comp-founders">與台積電・聯發科・統一集團<br>合作起家，深耕發展</div>
+      </div>
+      <div class="head-51">
+        <div class="comp-brand">51Talk</div>
+        <div class="comp-sub">中資背景・菲師為主</div>
+      </div>
+      <div class="head-oi">
+        <div class="comp-brand">OiKid</div>
+        <div class="comp-sub">自編教材・傳統思維</div>
+      </div>
+    </div>
+    <div class="data-row">
+      <div class="row-label-cell"><div class="row-icon">👩‍🏫</div><div class="row-label">師資來源</div></div>
+      <div class="cell"><div class="cell-val">美、加、英、澳母語外師</div><div class="cell-note">全程純外師，無菲師選項</div></div>
+      <div class="cell"><div class="cell-val">主打菲律賓外師</div><div class="cell-note">美加英澳師資另計，<span class="warn">價格約 3 倍以上</span></div></div>
+      <div class="cell"><div class="cell-val">外師為主</div><div class="cell-note">師資來源多元，品質參差不齊</div></div>
+    </div>
+    <div class="data-row">
+      <div class="row-label-cell"><div class="row-icon">📚</div><div class="row-label">教學法</div></div>
+      <div class="cell"><div class="cell-val">母語沉浸式習得</div><div class="cell-note">大量聽說輸入，模擬英語母語自然習得歷程</div></div>
+      <div class="cell"><div class="cell-val">輕鬆生動互動式</div><div class="cell-note">課程氣氛活潑，學習壓力較低，系統性稍弱</div></div>
+      <div class="cell"><div class="cell-val">傳統華人英文思維</div><div class="cell-note">以中文邏輯切入，偏重文法翻譯導向</div></div>
+    </div>
+    <div class="data-row">
+      <div class="row-label-cell"><div class="row-icon">📊</div><div class="row-label">程度追蹤</div></div>
+      <div class="cell"><div class="cell-val">CEFR 國際分級清晰</div><div class="cell-note">Starter → Lv6，每階段對應國際認證指標</div></div>
+      <div class="cell"><div class="cell-val">進度感較不明顯</div><div class="cell-note">缺乏清晰里程碑，難以量化孩子的程度提升</div></div>
+      <div class="cell"><div class="cell-val">自訂分級系統</div><div class="cell-note">非 CEFR 國際標準，對外認可度與比較性有限</div></div>
+    </div>
+    <div class="data-row">
+      <div class="row-label-cell"><div class="row-icon">🔒</div><div class="row-label">資安背景</div></div>
+      <div class="cell"><div class="cell-val">無資安疑慮</div><div class="cell-note">企業合規透明，無境外資料外流風險</div></div>
+      <div class="cell"><div class="cell-val warn">中資背景</div><div class="cell-note">資料儲存與個資隱私存在潛在疑慮，需審慎評估</div></div>
+      <div class="cell"><div class="cell-val">非中資</div><div class="cell-note">無明顯資安疑慮</div></div>
+    </div>
+    <div class="data-row">
+      <div class="row-label-cell"><div class="row-icon">🎯</div><div class="row-label">教材</div></div>
+      <div class="cell"><div class="cell-val">美國當地州立學校教材</div><div class="cell-note">涵蓋 YLE 選修・全民英檢對應課程</div></div>
+      <div class="cell"><div class="cell-val">平台自選教材</div><div class="cell-note">內容多元，但與國際認證銜接性不足</div></div>
+      <div class="cell"><div class="cell-val">主打自編教材</div><div class="cell-note">強調獨家課程，難與國際認證直接銜接</div></div>
+    </div>
+    <div class="data-row">
+      <div class="row-label-cell"><div class="row-icon">💰</div><div class="row-label">定價</div></div>
+      <div class="cell"><div class="cell-val">母語外師合理定價</div><div class="cell-note">性價比高，師資品質有保障</div></div>
+      <div class="cell"><div class="cell-val">菲師價低、母語師溢價高</div><div class="cell-note">選擇母語師後總費用不見得便宜</div></div>
+      <div class="cell"><div class="cell-val">中等定價</div><div class="cell-note">自編教材附加價值因人而異</div></div>
+    </div>
+  </div>
+
+  <div class="compare-bar">
+    <div class="compare-head">
+      <div>比較維度</div><div>🌟 ETalking Kids</div><div>51Talk</div><div>OiKid</div>
+    </div>
+    <div class="compare-row"><div>母語外師（美加英澳）</div><div><span class="tag tag-g">✔ 全部</span></div><div><span class="tag tag-r">✘ 加價 3x</span></div><div><span class="tag tag-y">△ 不一定</span></div></div>
+    <div class="compare-row"><div>沉浸式習得教學法</div><div><span class="tag tag-g">✔ 核心理念</span></div><div><span class="tag tag-y">△ 輕鬆為主</span></div><div><span class="tag tag-r">✘ 傳統翻譯</span></div></div>
+    <div class="compare-row"><div>CEFR 國際分級</div><div><span class="tag tag-g">✔ 完整對應</span></div><div><span class="tag tag-r">✘ 不明確</span></div><div><span class="tag tag-r">✘ 自訂系統</span></div></div>
+    <div class="compare-row"><div>YLE／全民英檢銜接</div><div><span class="tag tag-g">✔ 選修涵蓋</span></div><div><span class="tag tag-r">✘</span></div><div><span class="tag tag-r">✘</span></div></div>
+    <div class="compare-row"><div>資安安全性</div><div><span class="tag tag-g">✔ 無疑慮</span></div><div><span class="tag tag-r">⚠ 中資背景</span></div><div><span class="tag tag-g">✔ 無疑慮</span></div></div>
+    <div class="compare-row"><div>程度進步可視化</div><div><span class="tag tag-g">✔ 清晰里程碑</span></div><div><span class="tag tag-r">✘ 較難量化</span></div><div><span class="tag tag-y">△ 自訂指標</span></div></div>
+  </div>
+
+  <div class="action-bar">
+    <div class="action-icon">💡</div>
+    <div>
+      <div class="action-main">安親班一個月 <em>3,000 元</em>，兩年累積下來，孩子真正獲得多少 <em>沉浸式英語環境</em> 的練習機會？</div>
+      <div class="action-sub">ETalking Kids 把語言學校透過線上帶到你面前——每一堂課，都是純外師的<em>專屬母語環境</em>。</div>
+    </div>
+  </div>
+
+  <p class="comp-footer">資料僅供參考・ETalking Kids 內部競品分析 2026</p>
+</div>
+</div>
+</div>
+
+<script>
+var currentPage = 1;
+var snapIds = {1:'snap1', 2:'snap2'};
+var fileNames = {1:'ETalking_教材程度對照表.png', 2:'ETalking_競品比較.png'};
+
+function switchPage(n){
+  currentPage = n;
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  document.getElementById('page'+n).classList.add('active');
+  document.querySelectorAll('.tab')[n-1].classList.add('active');
+  document.getElementById('pageLabel').textContent = '第 '+n+' 頁 / 共 2 頁';
+}
+
+function capture(cb){
+  var el = document.getElementById(snapIds[currentPage]);
+  html2canvas(el,{scale:2,backgroundColor:'#f0f8ff',useCORS:true,logging:false}).then(cb);
+}
+function resetBtn(btn,label,icon){
+  btn.disabled=false;
+  btn.innerHTML='<svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:currentColor"><path d="'+icon+'"/></svg> '+label;
+}
+function showToast(id){
+  var e=document.getElementById(id);e.style.display='flex';
+  setTimeout(function(){e.style.display='none';},2800);
+}
+/* ── 字級控制 ── */
+var BASE = 100;
+var slider  = document.getElementById('fntSlider');
+var pctEl   = document.getElementById('fntPct');
+var snapEls = [document.getElementById('snap1'), document.getElementById('snap2')];
+
+/* 頁面載入後，把每個元素的原始 font-size 存入 dataset */
+function storeFontSizes() {
+  snapEls.forEach(function(root) {
+    if (!root) return;
+    root.querySelectorAll('*').forEach(function(el) {
+      el.dataset.baseFontPx = parseFloat(window.getComputedStyle(el).fontSize);
+    });
+  });
+}
+
+function applyFontScale(pct) {
+  var ratio = pct / 100;
+  snapEls.forEach(function(root) {
+    if (!root) return;
+    root.querySelectorAll('*').forEach(function(el) {
+      if (el.dataset.baseFontPx) {
+        el.style.fontSize = (parseFloat(el.dataset.baseFontPx) * ratio) + 'px';
+      }
+    });
+  });
+  pctEl.textContent = pct + '%';
+  slider.value = pct;
+}
+
+/* 等 DOM 渲染完再讀 computed style */
+window.addEventListener('load', function() {
+  storeFontSizes();
+});
+
+slider.addEventListener('input', function() { applyFontScale(+this.value); });
+document.getElementById('fntUp').addEventListener('click', function() {
+  applyFontScale(Math.min(150, +slider.value + 5));
+});
+document.getElementById('fntDn').addEventListener('click', function() {
+  applyFontScale(Math.max(70, +slider.value - 5));
+});
+document.getElementById('fntReset').addEventListener('click', function() {
+  applyFontScale(BASE);
+  /* 重置時移除 inline style，完全回到 CSS 原始值 */
+  snapEls.forEach(function(root) {
+    if (!root) return;
+    root.querySelectorAll('*').forEach(function(el) {
+      el.style.fontSize = '';
+    });
+  });
+});
+
+
+var cpIcon='M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z';
+
+document.getElementById('btnDl').addEventListener('click',function(){
+  var b=this;b.disabled=true;b.textContent='產生中…';
+  capture(function(c){
+    var a=document.createElement('a');
+    a.download=fileNames[currentPage];
+    a.href=c.toDataURL('image/png');a.click();
+    resetBtn(b,'下載圖片',dlIcon);
+  });
+});
+document.getElementById('btnCp').addEventListener('click',function(){
+  var b=this;b.disabled=true;b.textContent='複製中…';
+  capture(function(c){
+    c.toBlob(function(blob){
+      try{
+        navigator.clipboard.write([new ClipboardItem({'image/png':blob})]).then(function(){
+          showToast('toastOk');
+        }).catch(function(){showToast('toastErr');});
+      }catch(e){showToast('toastErr');}
+      resetBtn(b,'複製圖片',cpIcon);
+    },'image/png');
+  });
+});
+</script>
+</body>
+</html>
